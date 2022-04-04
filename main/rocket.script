@@ -1,7 +1,8 @@
 go.property('dir', vmath.vector3())
 
 function init(self)
-	self.speed = 200
+	self.speed = 200	-- [px/s]
+	self.life = 1		-- [s]
 end
 
 function final(self)
@@ -14,12 +15,20 @@ function update(self, dt)
 	pos = go.get_position()
 	pos = pos + self.speed * self.dir * dt
 	go.set_position(pos)
+
+	self.life = self.life - dt
+	if self.life < 0 then
+		self.life = 1000	-- just a big number so it won't play again
+		go.set_rotation(vmath.quat())
+		self.speed = 0
+		msg.post('#sprite', 'play_animation', {id = hash('explosion')})
+	end
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
+	if message_id == hash('animation_done') then
+		go.delete()
+	end
 end
 
 function on_input(self, action_id, action)
