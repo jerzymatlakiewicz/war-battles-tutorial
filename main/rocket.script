@@ -11,6 +11,13 @@ function final(self)
 	-- Remove this function if not needed
 end
 
+local function explode(self)
+	self.life = 1000	-- just a big number so it won't play again
+	go.set_rotation(vmath.quat())
+	self.speed = 0
+	msg.post('#sprite', 'play_animation', {id = hash('explosion')})
+end
+
 function update(self, dt)
 	pos = go.get_position()
 	pos = pos + self.speed * self.dir * dt
@@ -18,16 +25,16 @@ function update(self, dt)
 
 	self.life = self.life - dt
 	if self.life < 0 then
-		self.life = 1000	-- just a big number so it won't play again
-		go.set_rotation(vmath.quat())
-		self.speed = 0
-		msg.post('#sprite', 'play_animation', {id = hash('explosion')})
+		explode(self)
 	end
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash('animation_done') then
 		go.delete()
+	elseif message_id == hash('collision_response') then
+		explode(self)
+		go.delete(message.other_id)
 	end
 end
 
