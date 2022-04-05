@@ -3,6 +3,7 @@ go.property('dir', vmath.vector3())
 function init(self)
 	self.speed = 200	-- [px/s]
 	self.life = 1		-- [s]
+	msg.post('#explodeco', 'disable')
 end
 
 function final(self)
@@ -12,9 +13,10 @@ function final(self)
 end
 
 local function explode(self)
-	self.life = 1000	-- just a big number so it won't play again
+	self.life = 1000	-- just a big number so it won't explode again
 	go.set_rotation(vmath.quat())
 	self.speed = 0
+	msg.post('#explodeco', 'enable')
 	msg.post('#sprite', 'play_animation', {id = hash('explosion')})
 end
 
@@ -33,8 +35,10 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash('animation_done') then
 		go.delete()
 	elseif message_id == hash('collision_response') then
-		explode(self)
 		go.delete(message.other_id)
+		if sender == msg.url('main', go.get_id(), 'hitco') then
+			explode(self)
+		end
 	end
 end
 
