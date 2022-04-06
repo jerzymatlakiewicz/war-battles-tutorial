@@ -34,7 +34,7 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "hitco"
+  id: "rocketco"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
   "type: COLLISION_OBJECT_TYPE_KINEMATIC\n"
@@ -82,14 +82,14 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "explodeco"
+  id: "explosionco"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
   "type: COLLISION_OBJECT_TYPE_KINEMATIC\n"
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"rockets\"\n"
+  "group: \"explosions\"\n"
   "mask: \"tanks\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"

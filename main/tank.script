@@ -1,9 +1,7 @@
-go.property('dir', vmath.vector3())
-
 function init(self)
-	self.speed = 200	-- [px/s]
-	self.life = 1		-- [s]
-	msg.post('#explosionco', 'disable')
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
 end
 
 function final(self)
@@ -12,29 +10,20 @@ function final(self)
 	-- Remove this function if not needed
 end
 
-local function explode(self)
-	self.life = 1000	-- just a big number so it won't explode again
-	go.set_rotation(vmath.quat())
-	self.speed = 0
-	msg.post('#explosionco', 'enable')
-	msg.post('#sprite', 'play_animation', {id = hash('explosion')})
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
 end
 
-function update(self, dt)
-	pos = go.get_position()
-	pos = pos + self.speed * self.dir * dt
-	go.set_position(pos)
-
-	self.life = self.life - dt
-	if self.life < 0 then
-		explode(self)
-	end
+function fixed_update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash('collision_response') and message.own_group == hash('rockets') then
-		explode(self)
-	elseif message_id == hash('animation_done') then
+	if message_id == hash('collision_response') then
 		go.delete()
 	end
 end
